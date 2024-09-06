@@ -1,4 +1,5 @@
 const socket = io();
+let allClientBounds = L.latLngBounds([]);
 
 socket.on('connect', () => {
     console.log('Connected to server');
@@ -32,13 +33,23 @@ const markers = {};
 socket.on('location-received', (data) => {
     const { id, lat, lon } = data;
     console.log(`Location received: ID=${id}, Latitude=${lat}, Longitude=${lon}`);
-    map.setView([lat, lon], 16);
+  
+    // Update marker position
     if (markers[id]) {
-        markers[id].setLatLng([lat, lon]);
+      markers[id].setLatLng([lat, lon]);
     } else {
-        markers[id] = L.marker([lat, lon]).addTo(map);
+      markers[id] = L.marker([lat, lon]).addTo(map);
     }
-});
+  
+    // Extend bounds to include current client's location
+    allClientBounds.extend([lat, lon]);
+  
+    // Zoom map to fit all clients only once after receiving all locations
+    if (Object.keys(markers).length === Object.values(io.sockets.connected).length) { // Check if all clients have sent their location
+      map.fitBounds(allClientBounds);
+      allClientBounds = L.latLngBounds([]); // Reset bounds for next round of updates
+    }
+  });
 
 socket.on('client-disconnected', (data) => {
     const { id } = data;
