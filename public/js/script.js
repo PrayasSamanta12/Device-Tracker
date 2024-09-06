@@ -44,10 +44,13 @@ socket.on('location-received', (data) => {
     // Extend bounds to include current client's location
     allClientBounds.extend([lat, lon]);
   
-    // Zoom map to fit all clients only once after receiving all locations
-    if (Object.keys(markers).length === Object.values(io.sockets.connected).length) { // Check if all clients have sent their location
+    // Zoom map to fit all clients, but only if there's more than one client
+    if (Object.keys(markers).length > 1) {
       map.fitBounds(allClientBounds);
       allClientBounds = L.latLngBounds([]); // Reset bounds for next round of updates
+    } else {
+      // If there's only one client, zoom to their location
+      map.setView([lat, lon], 16);
     }
   });
 
