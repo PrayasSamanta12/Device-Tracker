@@ -6,6 +6,7 @@ const path = require('path');
 
 const server = http.createServer(app);
 const io = socketIO(server);
+const PORT=process.env.PORT||3020;
 
 // Setting up ejs
 app.set('view engine', 'ejs');
@@ -34,4 +35,4 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-server.listen(3020, () => console.log('Server running on port 3020...'));
+server.listen(PORT, () => console.log('Server running on port 3020...'));
