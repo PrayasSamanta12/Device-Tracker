@@ -12,11 +12,11 @@ Server-side handling of connections and data broadcasting.
 
 ## Technologies:
 
-Node.js<br>
-Express<br>
-Socket.IO<br>
-Leaflet<br>
-Ejs<br>
+Node.js</br>
+Express</br>
+Socket.IO</br>
+Leaflet</br>
+Ejs</br>
 
 ***Visit Website*** : https://track-friends-device.onrender.com
 
